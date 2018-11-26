@@ -1,30 +1,38 @@
 # Design and Development Challenge – Bowling Score
+This script will accept a string of bowling scores and calculate the final total. 
 
-## Requirement
-Create a program which, given a valid sequence of rolls for one line of American Ten-Pin Bowling, produces the total score for the game. Fork this repository, build your program in the language of your choice, then submit a pull request with your code.
+## Dependencies
+*   BASH 4 is required for some string parsing.
 
-## Tasks which are out of scope
-*   No need to check for valid rolls.
-*   No need to check for correct number of rolls and frames.
-*   No need to provide scores for intermediate frames.
+## Limitations
+*   Does not validate input
+*   Does not limit number of turns or frames
 
-## Scoring Logic
-*   Each game, or "line" of bowling, includes ten turns, or "frames" for the bowler.
-*   In each frame, the bowler gets up to two tries to knock down all the pins.
-*   If in two tries, he fails to knock them all down, his score for that frame is the total number of pins knocked down in his two tries.
-*   If in two tries he knocks them all down, this is called a "spare" and his score for the frame is ten plus the number of pins knocked down on his next throw (in his next turn).
-*   If on his first try in the frame he knocks down all the pins, this is called a "strike". His turn is over, and his score for the frame is ten plus the simple total of the pins knocked down in his next two rolls.
-*   If he gets a spare or strike in the last (tenth) frame, the bowler gets to throw one or two more bonus balls, respectively. These bonus throws are taken as part of the same turn. If the bonus throws knock down all the pins, the process does not repeat: the bonus throws are only used to calculate the score of the final frame.
-*   The game score is the total of all frame scores.
+## Usage
+No installation is required for this script; instead, simply put it in place and invoke it directly. A string that is between 12 and 22 characters and which represents a bowling score may optionally be provided as an argument. If this is not provided, the script will prompt you for the score.
 
-## Validation Test Cases
-Use the test cases from the table below to validate the scoring logic of your program. For program input, "X" indicates a strike, "/" indicates a spare, "-" indicates a miss, and a number indicates the number of pins knocked down in the roll.
+The script will interpret the following from the provided string:
+*   An "X" represents a strike. It will add 10 plus the next two rolls to the total score.
+*   A "/" represents a spare. Paired with the preceding roll, it will add 10 plus the next roll to the total score.
+*   A "-" represents a miss. It adds nothing to the total score.
+*   Any number represents that number of pins knocked over. It will be added to the total score unless superceded by anything described above.
 
-| Program Input         | Scoring Calculation                                                                                                             | Total Score |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------|-------------|
-| XXXXXXXXXXXX          | (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) + (10+10+10) | 300         |
-| 9-9-9-9-9-9-9-9-9-9-  | 9 + 9 + 9 + 9 + 9 + 9 + 9 + 9 + 9 + 9                                                                                           | 90          |
-| 5/5/5/5/5/5/5/5/5/5/5 | (10+5) + (10+5) + (10+5) + (10+5) + (10+5) + (10+5) + (10+5) + (10+5) + (10+5) + (10+5)                                         | 150         |
-| X7/9-X-88/-6XXX81     | (10+7+3) + (7+3+9) + 9 + (10+0+8) + 8 + (8+2+0) + 6 + (10+10+10) + (10+10+8) + (10+8+1)                                         | 167         |
-
-
+Example uses of the script are as follows:
+*   Calculating a score with all strikes:
+```
+$ ./splits-happen.sh XXXXXXXXXXXX
+Your final score was 300.
+```
+*   Calculating a score with mixed rolls:
+```
+$ ./splits-happen.sh X7/9-X-88/-6XXX81
+Your final score was 167.
+```
+*   Providing the score in the script (in this case, alternating 5s and spares):
+```
+$ ./splits-happen.sh 
+What was your score?
+An "X" will be interpreted as a strike, a "/" as a spare, and a "-" as a miss. Numbers are pins knocked down.
+Please enter your scores: 5/5/5/5/5/5/5/5/5/5/5
+Your final score was 150.
+```
